@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ user.name }} Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Users</a></li>
+                <li class="breadcrumb-item active">{{ user.name }}</li>
+            </ol>
+        </nav>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card shadow mb-4">
+            <div class="card-header">
+                <h2 class="card-title h5 mb-0">Provider Details</h2>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Name:</div>
+                    <div class="col-md-8">{{ user.name }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Email:</div>
+                    <div class="col-md-8">{{ user.email }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Phone:</div>
+                    <div class="col-md-8">{{ user.phone }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Status:</div>
+                    <div class="col-md-8">
+                        <span class="badge rounded-pill bg-{{ 'success' if user.status == 'Active' else 'secondary' }}">
+                            {{ user.status }}
+                        </span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Address:</div>
+                    <div class="col-md-8">{{ user.address }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Provider Type:</div>
+                    <div class="col-md-8">{{ user.provider_type }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Specialty:</div>
+                    <div class="col-md-8">{{ user.specialty }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Last Visit:</div>
+                    <div class="col-md-8">{{ user.last_visit }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-4 fw-bold">Notes:</div>
+                    <div class="col-md-8">{{ user.notes }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2 class="card-title h5 mb-0">Actions</h2>
+            </div>
+            <div class="card-body">
+                <button id="callProviderBtn" class="btn btn-success btn-lg w-100 mb-3" 
+                        {% if user.status != 'Active' %}disabled{% endif %} 
+                        data-phone="{{ user.phone }}">
+                    <i class="bi bi-telephone-fill me-2"></i> Call Provider
+                </button>
+                <div id="callStatus" class="alert d-none mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const callButton = document.getElementById('callProviderBtn');
+        const callStatus = document.getElementById('callStatus');
+        
+        callButton.addEventListener('click', function() {
+            // Get phone number from data attribute
+            const phoneNumber = this.dataset.phone;
+            
+            // Disable button and show loading state
+            callButton.disabled = true;
+            callButton.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Initiating call...';
+            
+            // Make API call to initiate the call
+            fetch('/api/make-call', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone_number: phoneNumber
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    // Show error message
+                    callStatus.classList.remove('d-none', 'alert-success');
+                    callStatus.classList.add('alert-danger');
+                    callStatus.textContent = `Error: ${data.error}`;
+                } else {
+                    // Show success message
+                    callStatus.classList.remove('d-none', 'alert-danger');
+                    callStatus.classList.add('alert-success');
+                    callStatus.textContent = `Call initiated successfully! Connection ID: ${data.result.call_connection_id}`;
+                }
+            })
+            .catch(error => {
+                // Show error message
+                callStatus.classList.remove('d-none', 'alert-success');
+                callStatus.classList.add('alert-danger');
+                callStatus.textContent = `Error: ${error.message}`;
+            })
+            .finally(() => {
+                // Reset button state
+                callButton.disabled = false;
+                callButton.innerHTML = '<i class="bi bi-telephone-fill me-2"></i> Call Provider';
+            });
+        });
+    });
+</script>
+{% endblock %}

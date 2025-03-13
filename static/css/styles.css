@@ -1,0 +1,113 @@
+/* Main styling for the application */
+body {
+    background-color: #121212;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #ffffff;
+}
+
+/* Card styling */
+.card {
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+.card-header {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Table styling */
+.table {
+    color: #e0e0e0;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.table td {
+    vertical-align: middle;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Button styling */
+.btn-outline-primary {
+    border-color: #0d6efd;
+    color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Call button specific styling */
+#callProviderBtn {
+    transition: all 0.3s ease;
+}
+
+#callProviderBtn:hover:not(:disabled) {
+    transform: scale(1.05);
+}
+
+#callProviderBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Footer styling */
+.footer {
+    margin-top: 3rem;
+    padding: 1rem 0;
+    background-color: #1e1e1e;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+/* Badge styling */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+
+/* Dark theme overrides for Bootstrap components */
+.navbar-dark {
+    background-color: #1e1e1e !important;
+}
+
+.form-control, .form-select {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #ffffff;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    color: #ffffff;
+}
+
+/* Dark tables */
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.text-muted {
+    color: #b0b0b0 !important;
+}
